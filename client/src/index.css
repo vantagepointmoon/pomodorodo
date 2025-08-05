@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(240, 5%, 26%);
+  --muted: hsl(210, 40%, 96%);
+  --muted-foreground: hsl(215, 16%, 47%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(240, 5%, 26%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(240, 5%, 26%);
+  --border: hsl(215, 14%, 89%);
+  --input: hsl(215, 14%, 89%);
+  --primary: hsl(246, 83%, 67%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(151, 81%, 46%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --accent: hsl(45, 96%, 49%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --break: hsl(324, 76%, 60%);
+  --break-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 5%, 26%);
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(246, 83%, 67%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(151, 81%, 46%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(45, 96%, 49%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --break: hsl(324, 76%, 60%);
+  --break-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+/* Custom font for Inter */
+.font-inter {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Custom animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Drag and drop visual feedback */
+.drag-over {
+  @apply bg-blue-50 border-blue-300;
+}
+
+/* Timer progress ring */
+.timer-progress {
+  transition: stroke-dashoffset 1s ease-in-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400;
+}
