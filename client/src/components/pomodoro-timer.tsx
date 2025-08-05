@@ -6,13 +6,15 @@ import { Clock, Play, Pause, Square } from "lucide-react";
 import { useTimer } from "@/hooks/use-timer";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import type { Todo } from "@shared/schema";
 
 interface PomodoroTimerProps {
   onTimerTypeChange: (type: "work" | "break") => void;
   onTimerStateChange: (isRunning: boolean) => void;
+  currentTask?: Todo | null;
 }
 
-export default function PomodoroTimer({ onTimerTypeChange, onTimerStateChange }: PomodoroTimerProps) {
+export default function PomodoroTimer({ onTimerTypeChange, onTimerStateChange, currentTask }: PomodoroTimerProps) {
   const {
     timeRemaining,
     isRunning,
@@ -160,16 +162,25 @@ export default function PomodoroTimer({ onTimerTypeChange, onTimerStateChange }:
             </Button>
           </div>
 
-          <div className="flex justify-center space-x-4 text-sm">
-            <div className="text-center">
-              <div className="font-semibold text-slate-800">{completedPomodoros}</div>
-              <div className="text-slate-500">Completed</div>
-            </div>
-            <div className="text-center">
-              <div className="font-semibold text-slate-800">
-                {Math.floor(totalFocusTime / 60)}h {totalFocusTime % 60}m
+          <div className="space-y-4">
+            {currentTask && (
+              <div className="text-center p-3 bg-amber-50 rounded-lg border border-amber-200">
+                <div className="text-sm font-medium text-slate-800 mb-1">Working on:</div>
+                <div className="text-xs text-slate-600 truncate">{currentTask.title}</div>
               </div>
-              <div className="text-slate-500">Focus Time</div>
+            )}
+            
+            <div className="flex justify-center space-x-4 text-sm">
+              <div className="text-center">
+                <div className="font-semibold text-slate-800">{completedPomodoros}</div>
+                <div className="text-slate-500">Completed</div>
+              </div>
+              <div className="text-center">
+                <div className="font-semibold text-slate-800">
+                  {Math.floor(totalFocusTime / 60)}h {totalFocusTime % 60}m
+                </div>
+                <div className="text-slate-500">Focus Time</div>
+              </div>
             </div>
           </div>
         </div>

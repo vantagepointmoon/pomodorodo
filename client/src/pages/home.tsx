@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import TaskInput from "@/components/task-input";
@@ -6,6 +6,7 @@ import TaskSection from "@/components/task-section";
 import PomodoroTimer from "@/components/pomodoro-timer";
 import MotivationalContent from "@/components/motivational-content";
 import ProductivityStats from "@/components/productivity-stats";
+import CurrentTask from "@/components/current-task";
 import { Check, Settings, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Todo } from "@shared/schema";
@@ -16,6 +17,7 @@ export default function Home() {
   const [filter, setFilter] = useState<FilterType>("all");
   const [timerType, setTimerType] = useState<"work" | "break">("work");
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [currentTask, setCurrentTask] = useState<Todo | null>(null);
 
   const { data: todos = [], isLoading } = useQuery<Todo[]>({
     queryKey: ["/api/todos"],
@@ -35,6 +37,12 @@ export default function Home() {
   const todoItems = filteredTodos.filter(todo => todo.status === "todo");
   const workingItems = filteredTodos.filter(todo => todo.status === "working");
   const completedItems = filteredTodos.filter(todo => todo.status === "completed");
+
+  // Set current task from working items
+  useEffect(() => {
+    const workingTask = workingItems[0] || null;
+    setCurrentTask(workingTask);
+  }, [workingItems]);
 
   const stats = {
     active: todos.filter(todo => !todo.completed).length,
@@ -77,6 +85,21 @@ export default function Home() {
         {/* Top Motivational Content */}
         <div className="mb-8">
           <MotivationalContent timerType={timerType} isRunning={isTimerRunning} />
+        </div>
+
+        {/* Current Task and Timer Section */}
+        <div className="mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <CurrentTask 
+              currentTask={currentTask} 
+              onTaskSet={setCurrentTask}
+            />
+            <PomodoroTimer 
+              onTimerTypeChange={setTimerType} 
+              onTimerStateChange={setIsTimerRunning}
+              currentTask={currentTask}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -147,10 +170,6 @@ export default function Home() {
 
           {/* Right Column */}
           <div className="space-y-6">
-            <PomodoroTimer 
-              onTimerTypeChange={setTimerType} 
-              onTimerStateChange={setIsTimerRunning}
-            />
             <ProductivityStats todos={todos} />
           </div>
         </div>

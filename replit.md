@@ -31,6 +31,13 @@ The Pomodoro timer is implemented with a custom React hook that manages work/bre
 ### Task Management
 Tasks follow a Kanban-style board with three states: todo, working, and completed. The system supports drag-and-drop functionality for moving tasks between states, priority levels, and time tracking integration. The task input form is responsive and mobile-friendly with full-width text fields.
 
+### Current Task System
+A dedicated "Current Task" section positioned prominently between motivational content and task management, featuring:
+- Drag-and-drop area for selecting tasks to work on
+- Visual indicators showing active task status with priority levels
+- Quick action buttons for completing or pausing tasks
+- Integration with Pomodoro timer to display current task context
+
 ### Motivational Content System
 Dynamic content display at the top of the page that switches based on timer state:
 - Default state (timer not running): Quick exercise routines
