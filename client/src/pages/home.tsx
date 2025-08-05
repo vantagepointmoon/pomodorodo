@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import TaskInput from "@/components/task-input";
 import TaskSection from "@/components/task-section";
 import PomodoroTimer from "@/components/pomodoro-timer";
@@ -89,17 +89,21 @@ export default function Home() {
 
         {/* Current Task and Timer Section */}
         <div className="mb-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <CurrentTask 
-              currentTask={currentTask} 
-              onTaskSet={setCurrentTask}
-            />
-            <PomodoroTimer 
-              onTimerTypeChange={setTimerType} 
-              onTimerStateChange={setIsTimerRunning}
-              currentTask={currentTask}
-            />
-          </div>
+          <Card>
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <CurrentTask 
+                  currentTask={currentTask} 
+                  onTaskSet={setCurrentTask}
+                />
+                <PomodoroTimer 
+                  onTimerTypeChange={setTimerType} 
+                  onTimerStateChange={setIsTimerRunning}
+                  currentTask={currentTask}
+                />
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

@@ -98,13 +98,12 @@ export default function PomodoroTimer({ onTimerTypeChange, onTimerStateChange, c
   };
 
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <div className="text-center">
-          <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center justify-center">
-            <Clock className="mr-2 text-accent" />
-            Pomodoro Timer
-          </h3>
+    <div className="h-full">
+      <div className="text-center">
+        <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center justify-center">
+          <Clock className="mr-2 text-accent" />
+          Pomodoro Timer
+        </h3>
 
           <div className="relative w-32 h-32 mx-auto mb-6">
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
@@ -184,7 +183,6 @@ export default function PomodoroTimer({ onTimerTypeChange, onTimerStateChange, c
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+    </div>
   );
 }

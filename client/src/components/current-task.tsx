@@ -100,12 +100,11 @@ export default function CurrentTask({ currentTask, onTaskSet }: CurrentTaskProps
   };
 
   return (
-    <Card className="h-full">
-      <CardContent className="pt-6">
-        <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
-          <Clock className="mr-2 text-accent" />
-          Current Task
-        </h3>
+    <div className="h-full">
+      <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+        <Clock className="mr-2 text-accent" />
+        Current Task
+      </h3>
 
         <div
           className={`min-h-[120px] border-2 border-dashed rounded-lg p-4 transition-colors ${
@@ -164,7 +163,6 @@ export default function CurrentTask({ currentTask, onTaskSet }: CurrentTaskProps
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+    </div>
   );
 }
