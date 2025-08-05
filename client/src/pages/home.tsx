@@ -38,11 +38,11 @@ export default function Home() {
   const workingItems = filteredTodos.filter(todo => todo.status === "working");
   const completedItems = filteredTodos.filter(todo => todo.status === "completed");
 
-  // Set current task from working items
+  // Set current task from todos marked as current
   useEffect(() => {
-    const workingTask = workingItems[0] || null;
-    setCurrentTask(workingTask);
-  }, [workingItems]);
+    const currentTaskFromTodos = todos?.find(todo => todo.isCurrent) || null;
+    setCurrentTask(currentTaskFromTodos);
+  }, [todos]);
 
   const stats = {
     active: todos.filter(todo => !todo.completed).length,

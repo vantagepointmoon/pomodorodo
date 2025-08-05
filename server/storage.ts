@@ -39,6 +39,7 @@ export class MemStorage implements IStorage {
     const todo: Todo = {
       ...insertTodo,
       id,
+      isCurrent: false,
       createdAt: new Date(),
       completedAt: null,
       timeSpent: 0,
@@ -50,6 +51,15 @@ export class MemStorage implements IStorage {
   async updateTodo(id: string, updates: UpdateTodo): Promise<Todo | undefined> {
     const todo = this.todos.get(id);
     if (!todo) return undefined;
+
+    // If setting this todo as current, unset all other todos as current
+    if (updates.isCurrent === true) {
+      for (const [otherId, otherTodo] of this.todos) {
+        if (otherId !== id && otherTodo.isCurrent) {
+          this.todos.set(otherId, { ...otherTodo, isCurrent: false });
+        }
+      }
+    }
 
     const updatedTodo: Todo = {
       ...todo,

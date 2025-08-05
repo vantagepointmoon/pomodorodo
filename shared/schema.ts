@@ -9,6 +9,7 @@ export const todos = pgTable("todos", {
   completed: boolean("completed").notNull().default(false),
   status: text("status").notNull().default("todo"), // 'todo', 'working', 'completed'
   priority: text("priority").notNull().default("medium"), // 'low', 'medium', 'high'
+  isCurrent: boolean("is_current").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   completedAt: timestamp("completed_at"),
   timeSpent: integer("time_spent").default(0), // in seconds
@@ -29,6 +30,7 @@ export const insertTodoSchema = createInsertSchema(todos).omit({
   createdAt: true,
   completedAt: true,
   timeSpent: true,
+  isCurrent: true,
 });
 
 export const updateTodoSchema = createInsertSchema(todos).omit({

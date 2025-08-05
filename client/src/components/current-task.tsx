@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, CheckCircle, Clock } from "lucide-react";
+import { CheckCircle, Clock } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { Todo } from "@shared/schema";
@@ -13,23 +11,21 @@ interface CurrentTaskProps {
 }
 
 export default function CurrentTask({ currentTask, onTaskSet }: CurrentTaskProps) {
-  const [isDragOver, setIsDragOver] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
   const updateTodoMutation = useMutation({
-    mutationFn: async ({ id, status, completed }: { id: string; status: string; completed?: boolean }) => {
+    mutationFn: async ({ id, completed, isCurrent }: { id: string; completed?: boolean; isCurrent?: boolean }) => {
       const res = await apiRequest("PATCH", `/api/todos/${id}`, { 
-        status, 
-        completed: completed !== undefined ? completed : status === "completed" 
+        completed,
+        isCurrent,
+        status: completed ? "completed" : "todo"
       });
       return res.json();
     },
     onSuccess: (updatedTask) => {
       queryClient.invalidateQueries({ queryKey: ["/api/todos"] });
-      if (updatedTask.status === "working") {
-        onTaskSet(updatedTask);
-      } else {
+      if (!updatedTask.isCurrent) {
         onTaskSet(null);
       }
     },
@@ -42,46 +38,21 @@ export default function CurrentTask({ currentTask, onTaskSet }: CurrentTaskProps
     },
   });
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-    
-    const taskId = e.dataTransfer.getData("text/plain");
-    if (taskId) {
-      updateTodoMutation.mutate({
-        id: taskId,
-        status: "working",
-        completed: false,
-      });
-    }
-  };
-
   const handleCompleteTask = () => {
     if (currentTask) {
       updateTodoMutation.mutate({
         id: currentTask.id,
-        status: "completed",
         completed: true,
+        isCurrent: false,
       });
     }
   };
 
-  const handlePauseTask = () => {
+  const handleRemoveFromCurrent = () => {
     if (currentTask) {
       updateTodoMutation.mutate({
         id: currentTask.id,
-        status: "todo",
-        completed: false,
+        isCurrent: false,
       });
     }
   };
@@ -107,16 +78,11 @@ export default function CurrentTask({ currentTask, onTaskSet }: CurrentTaskProps
       </h3>
 
         <div
-          className={`min-h-[120px] border-2 border-dashed rounded-lg p-4 transition-colors ${
-            isDragOver 
-              ? "border-accent bg-amber-50" 
-              : currentTask 
-                ? "border-amber-200 bg-amber-50" 
-                : "border-slate-300 bg-slate-50"
+          className={`min-h-[120px] border-2 rounded-lg p-4 transition-colors ${
+            currentTask 
+              ? "border-amber-200 bg-amber-50" 
+              : "border-slate-300 bg-slate-50"
           }`}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
         >
           {currentTask ? (
             <div className="space-y-4">
@@ -146,20 +112,20 @@ export default function CurrentTask({ currentTask, onTaskSet }: CurrentTaskProps
                   Complete Task
                 </Button>
                 <Button
-                  onClick={handlePauseTask}
+                  onClick={handleRemoveFromCurrent}
                   disabled={updateTodoMutation.isPending}
                   variant="outline"
                   size="sm"
                 >
-                  <Pause className="h-4 w-4" />
+                  Remove
                 </Button>
               </div>
             </div>
           ) : (
             <div className="text-center text-slate-500 py-8">
-              <Play className="h-8 w-8 mx-auto mb-3 text-slate-300" />
-              <p className="text-sm font-medium mb-1">No task selected</p>
-              <p className="text-xs">Drag a task here to start working on it</p>
+              <Clock className="h-8 w-8 mx-auto mb-3 text-slate-300" />
+              <p className="text-sm font-medium mb-1">No current task</p>
+              <p className="text-xs">Check the "Current" box on any task to focus on it</p>
             </div>
           )}
         </div>

@@ -70,6 +70,12 @@ export default function TaskCard({ task }: TaskCardProps) {
     });
   };
 
+  const handleToggleCurrent = () => {
+    updateTodoMutation.mutate({
+      isCurrent: !task.isCurrent,
+    });
+  };
+
   const handleSaveEdit = () => {
     if (editTitle.trim() && editTitle !== task.title) {
       updateTodoMutation.mutate({ title: editTitle.trim() });
@@ -119,6 +125,17 @@ export default function TaskCard({ task }: TaskCardProps) {
     >
       <div className="p-4">
         <div className="flex items-center space-x-3">
+          {/* Current task checkbox */}
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              checked={task.isCurrent}
+              onCheckedChange={handleToggleCurrent}
+              className="flex-shrink-0"
+              disabled={updateTodoMutation.isPending}
+            />
+            <span className="text-xs text-slate-500">Current</span>
+          </div>
+          
           {task.status === "working" && (
             <div className="w-3 h-3 bg-accent rounded-full animate-pulse" />
           )}
