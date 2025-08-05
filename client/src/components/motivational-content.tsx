@@ -7,6 +7,7 @@ import { workoutRoutines } from "@/lib/workout-data";
 
 interface MotivationalContentProps {
   timerType: "work" | "break";
+  isRunning?: boolean;
 }
 
 interface Quote {
@@ -14,7 +15,7 @@ interface Quote {
   author: string;
 }
 
-export default function MotivationalContent({ timerType }: MotivationalContentProps) {
+export default function MotivationalContent({ timerType, isRunning = false }: MotivationalContentProps) {
   const queryClient = useQueryClient();
 
   const { data: quote, isLoading } = useQuery<Quote>({
@@ -34,7 +35,12 @@ export default function MotivationalContent({ timerType }: MotivationalContentPr
 
   const currentWorkout = workoutRoutines[Math.floor(Math.random() * workoutRoutines.length)];
 
-  if (timerType === "work") {
+  // Show workout routine by default (when timer is not running)
+  // Show inspirational quotes when timer is running
+  const shouldShowQuote = isRunning;
+  const shouldShowWorkout = !shouldShowQuote;
+
+  if (shouldShowQuote) {
     return (
       <Card>
         <CardContent className="pt-6">
@@ -90,13 +96,14 @@ export default function MotivationalContent({ timerType }: MotivationalContentPr
     );
   }
 
+  // Show workout routine (default state or during break)
   return (
     <Card>
       <CardContent className="pt-6">
         <div className="text-center">
           <h4 className="text-md font-semibold text-slate-800 mb-4 flex items-center justify-center">
             <Dumbbell className="mr-2 text-break" />
-            Break Time Workout
+            {isRunning && timerType === "break" ? "Break Time Workout" : "Quick Exercise Break"}
           </h4>
 
           <div className="mb-4 rounded-lg overflow-hidden">

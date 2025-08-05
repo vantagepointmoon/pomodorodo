@@ -9,9 +9,10 @@ import { useToast } from "@/hooks/use-toast";
 
 interface PomodoroTimerProps {
   onTimerTypeChange: (type: "work" | "break") => void;
+  onTimerStateChange: (isRunning: boolean) => void;
 }
 
-export default function PomodoroTimer({ onTimerTypeChange }: PomodoroTimerProps) {
+export default function PomodoroTimer({ onTimerTypeChange, onTimerStateChange }: PomodoroTimerProps) {
   const {
     timeRemaining,
     isRunning,
@@ -41,6 +42,10 @@ export default function PomodoroTimer({ onTimerTypeChange }: PomodoroTimerProps)
   useEffect(() => {
     onTimerTypeChange(timerType);
   }, [timerType, onTimerTypeChange]);
+
+  useEffect(() => {
+    onTimerStateChange(isRunning);
+  }, [isRunning, onTimerStateChange]);
 
   useEffect(() => {
     if (timeRemaining === 0 && isRunning) {

@@ -15,6 +15,7 @@ type FilterType = "all" | "active" | "completed";
 export default function Home() {
   const [filter, setFilter] = useState<FilterType>("all");
   const [timerType, setTimerType] = useState<"work" | "break">("work");
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const { data: todos = [], isLoading } = useQuery<Todo[]>({
     queryKey: ["/api/todos"],
@@ -73,6 +74,11 @@ export default function Home() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Top Motivational Content */}
+        <div className="mb-8">
+          <MotivationalContent timerType={timerType} isRunning={isTimerRunning} />
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
           {/* Left Column */}
@@ -141,8 +147,10 @@ export default function Home() {
 
           {/* Right Column */}
           <div className="space-y-6">
-            <MotivationalContent timerType={timerType} />
-            <PomodoroTimer onTimerTypeChange={setTimerType} />
+            <PomodoroTimer 
+              onTimerTypeChange={setTimerType} 
+              onTimerStateChange={setIsTimerRunning}
+            />
             <ProductivityStats todos={todos} />
           </div>
         </div>
