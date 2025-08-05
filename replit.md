@@ -29,7 +29,7 @@ The app uses a comprehensive design system based on shadcn/ui, providing consist
 The Pomodoro timer is implemented with a custom React hook that manages work/break cycles, tracks completed sessions, and integrates with the task management system. Timer sessions are persisted to track productivity metrics. The timer state controls the dynamic content display at the top of the page.
 
 ### Task Management
-Tasks follow a Kanban-style board with three states: todo, working, and completed. The system supports drag-and-drop functionality for moving tasks between states, priority levels, and time tracking integration. The task input form is responsive and mobile-friendly with full-width text fields.
+Tasks follow a simplified two-column board with todo and completed states. Each task has a "Current" checkbox to mark it as the active focus task. The system supports priority levels and time tracking integration. The task input form is responsive and mobile-friendly with full-width text fields.
 
 ### Current Task System
 A dedicated "Current Task" section positioned prominently between motivational content and task management, featuring:

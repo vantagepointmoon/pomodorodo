@@ -35,7 +35,6 @@ export default function Home() {
   });
 
   const todoItems = filteredTodos.filter(todo => todo.status === "todo");
-  const workingItems = filteredTodos.filter(todo => todo.status === "working");
   const completedItems = filteredTodos.filter(todo => todo.status === "completed");
 
   // Set current task from todos marked as current
@@ -147,20 +146,13 @@ export default function Home() {
             </Card>
 
             {/* Task Sections */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <TaskSection
                 title="Todo"
                 icon="inbox"
                 tasks={todoItems}
                 dropZone="todo"
                 bgColor="slate"
-              />
-              <TaskSection
-                title="Working On"
-                icon="play-circle"
-                tasks={workingItems}
-                dropZone="working"
-                bgColor="amber"
               />
               <TaskSection
                 title="Completed"
