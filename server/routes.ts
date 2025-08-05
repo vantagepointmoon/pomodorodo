@@ -106,21 +106,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Quotes API proxy (to avoid CORS issues)
+  // Quotes from database
   app.get("/api/quotes", async (req, res) => {
     try {
-      const response = await fetch("https://api.quotable.io/random?tags=motivational|success|productivity");
-      if (!response.ok) {
-        throw new Error("Failed to fetch quote");
-      }
-      const quote = await response.json();
+      const quote = await storage.getRandomQuote();
       res.json(quote);
     } catch (error) {
-      res.status(500).json({ 
-        message: "Failed to fetch quote",
+      console.error("Failed to get quote:", error);
+      res.status(500).json({
+        message: "Failed to get quote",
         fallback: {
           content: "The way to get started is to quit talking and begin doing.",
           author: "Walt Disney"
+        }
+      });
+    }
+  });
+
+  // Exercises from database
+  app.get("/api/exercises", async (req, res) => {
+    try {
+      const exercise = await storage.getRandomExercise();
+      res.json(exercise);
+    } catch (error) {
+      console.error("Failed to get exercise:", error);
+      res.status(500).json({
+        message: "Failed to get exercise",
+        fallback: {
+          name: "Deep Breathing",
+          description: "Take 10 deep breaths",
+          duration: 60
         }
       });
     }

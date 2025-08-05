@@ -20,7 +20,13 @@ The application uses Wouter for lightweight client-side routing. Currently imple
 The backend is built with Express.js and follows a REST API pattern. It implements a modular route structure with separate concerns for different features (todos, timer sessions). The storage layer uses an abstraction pattern with an in-memory implementation that can be easily swapped for database persistence.
 
 ### Data Layer
-The schema is defined using Drizzle ORM with PostgreSQL as the target database. The schema includes tables for todos and timer sessions with proper relationships. Zod is used for runtime validation of API inputs and outputs, ensuring type safety across the full stack.
+The application now uses SQLite database for persistent data storage. The database includes tables for todos, timer sessions, quotes, and exercises with proper relationships. The schema includes:
+- **todos**: Task management with completion status, priority, and current task tracking
+- **timer_sessions**: Pomodoro session tracking linked to tasks
+- **quotes**: Inspirational quotes database for work sessions
+- **exercises**: Workout routines database for break periods
+
+Zod is used for runtime validation of API inputs and outputs, ensuring type safety across the full stack.
 
 ### UI Component System
 The app uses a comprehensive design system based on shadcn/ui, providing consistent styling and behavior. Components are built with accessibility in mind using Radix UI primitives. The design supports both light and dark themes with CSS custom properties.
@@ -49,10 +55,10 @@ Real-time statistics showing actual task completion data instead of mock data, w
 
 ## External Dependencies
 
-### Database
-- **PostgreSQL**: Primary database using Neon serverless PostgreSQL
-- **Drizzle ORM**: Type-safe database toolkit for schema definition and queries
-- **Drizzle Kit**: Database migration and introspection tools
+### Database  
+- **SQLite**: Local database for persistent storage without authentication
+- **sqlite3**: Node.js SQLite driver for database operations
+- **Custom Database Layer**: Direct SQL implementation with proper type safety
 
 ### UI and Styling
 - **Tailwind CSS**: Utility-first CSS framework for styling
@@ -72,7 +78,7 @@ Real-time statistics showing actual task completion data instead of mock data, w
 
 ### Third-party Integrations
 - **Unsplash API**: Motivational images during break periods
-- **External Quotes API**: Inspirational quotes for motivation content
+- **Local Database**: Quotes and exercises stored locally in SQLite for reliable access
 
 ### Utilities
 - **date-fns**: Date manipulation and formatting

@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Quote, Dumbbell, RefreshCw } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
-import { workoutRoutines } from "@/lib/workout-data";
+import { useExercise, type Exercise } from "@/lib/workout-data";
 
 interface MotivationalContentProps {
   timerType: "work" | "break";
@@ -23,6 +23,8 @@ export default function MotivationalContent({ timerType, isRunning = false }: Mo
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
+  const { data: exercise, isLoading: exerciseLoading } = useExercise();
+
   const refreshQuoteMutation = useMutation({
     mutationFn: async () => {
       const res = await apiRequest("GET", "/api/quotes");
@@ -33,7 +35,15 @@ export default function MotivationalContent({ timerType, isRunning = false }: Mo
     },
   });
 
-  const currentWorkout = workoutRoutines[Math.floor(Math.random() * workoutRoutines.length)];
+  const refreshExerciseMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("GET", "/api/exercises");
+      return res.json();
+    },
+    onSuccess: (newExercise) => {
+      queryClient.setQueryData(["/api/exercises"], newExercise);
+    },
+  });
 
   // Show workout routine by default (when timer is not running)
   // Show inspirational quotes when timer is running
@@ -114,14 +124,42 @@ export default function MotivationalContent({ timerType, isRunning = false }: Mo
             />
           </div>
 
-          <div className="space-y-2 text-left">
-            {currentWorkout.exercises.map((exercise, index) => (
-              <div key={index} className="flex items-center space-x-3 p-2 bg-slate-50 rounded">
-                <div className="w-4 h-4 bg-break rounded-full flex-shrink-0" />
-                <span className="text-slate-700">{exercise}</span>
+          {exerciseLoading ? (
+            <div className="text-slate-500">Loading exercise...</div>
+          ) : exercise ? (
+            <div className="space-y-3 text-left">
+              <div className="p-3 bg-slate-50 rounded-lg">
+                <h5 className="font-semibold text-slate-800 mb-2">{exercise.name}</h5>
+                <p className="text-slate-600 mb-2">{exercise.description}</p>
+                <div className="flex items-center text-sm text-slate-500">
+                  <div className="w-3 h-3 bg-break rounded-full mr-2" />
+                  Duration: {exercise.duration} seconds
+                </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <div className="space-y-2 text-left">
+              <div className="p-3 bg-slate-50 rounded-lg">
+                <h5 className="font-semibold text-slate-800 mb-2">Deep Breathing</h5>
+                <p className="text-slate-600 mb-2">Take 10 deep breaths to refresh your mind</p>
+                <div className="flex items-center text-sm text-slate-500">
+                  <div className="w-3 h-3 bg-break rounded-full mr-2" />
+                  Duration: 60 seconds
+                </div>
+              </div>
+            </div>
+          )}
+
+          <Button
+            variant="outline"
+            size="sm"
+            className="mt-4 border-break text-break hover:bg-break hover:text-white"
+            onClick={() => refreshExerciseMutation.mutate()}
+            disabled={refreshExerciseMutation.isPending}
+          >
+            <RefreshCw className={`mr-2 h-4 w-4 ${refreshExerciseMutation.isPending ? "animate-spin" : ""}`} />
+            New Exercise
+          </Button>
         </div>
       </CardContent>
     </Card>
