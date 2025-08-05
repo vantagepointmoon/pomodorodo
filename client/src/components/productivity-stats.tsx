@@ -20,18 +20,18 @@ export default function ProductivityStats({ todos }: ProductivityStatsProps) {
   const activeTasks = todos.filter(todo => !todo.completed).length;
   const completedTasks = todos.filter(todo => todo.completed).length;
 
-  // Mock data for demonstration
-  const mockStats = {
+  // Calculate stats based on actual data
+  const stats = {
     tasksCompleted: completedToday,
-    totalTasks: Math.max(totalToday, 8),
-    focusSessions: 3,
-    totalSessions: 6,
-    weeklyProgress: 83,
-    streak: 7,
+    totalTasks: totalToday || 0,
+    focusSessions: 0, // Will be updated when timer sessions are tracked
+    totalSessions: 0,
+    weeklyProgress: totalToday > 0 ? Math.round((completedToday / totalToday) * 100) : 0,
+    streak: 0, // Will be calculated based on consecutive completion days
   };
 
-  const taskProgress = (mockStats.tasksCompleted / mockStats.totalTasks) * 100;
-  const sessionProgress = (mockStats.focusSessions / mockStats.totalSessions) * 100;
+  const taskProgress = stats.totalTasks > 0 ? (stats.tasksCompleted / stats.totalTasks) * 100 : 0;
+  const sessionProgress = stats.totalSessions > 0 ? (stats.focusSessions / stats.totalSessions) * 100 : 0;
 
   return (
     <Card>
@@ -47,7 +47,7 @@ export default function ProductivityStats({ todos }: ProductivityStatsProps) {
             <div className="flex items-center space-x-2">
               <Progress value={taskProgress} className="w-24" />
               <span className="text-sm font-medium text-slate-800">
-                {mockStats.tasksCompleted}/{mockStats.totalTasks}
+                {stats.tasksCompleted}/{stats.totalTasks}
               </span>
             </div>
           </div>
@@ -57,7 +57,7 @@ export default function ProductivityStats({ todos }: ProductivityStatsProps) {
             <div className="flex items-center space-x-2">
               <Progress value={sessionProgress} className="w-24" />
               <span className="text-sm font-medium text-slate-800">
-                {mockStats.focusSessions}/{mockStats.totalSessions}
+                {stats.focusSessions}/{stats.totalSessions}
               </span>
             </div>
           </div>
@@ -65,9 +65,9 @@ export default function ProductivityStats({ todos }: ProductivityStatsProps) {
           <div className="flex items-center justify-between">
             <span className="text-slate-600">Weekly Goal</span>
             <div className="flex items-center space-x-2">
-              <Progress value={mockStats.weeklyProgress} className="w-24" />
+              <Progress value={stats.weeklyProgress} className="w-24" />
               <span className="text-sm font-medium text-slate-800">
-                {mockStats.weeklyProgress}%
+                {stats.weeklyProgress}%
               </span>
             </div>
           </div>
@@ -79,7 +79,7 @@ export default function ProductivityStats({ todos }: ProductivityStatsProps) {
             <div className="flex items-center space-x-1">
               <Flame className="h-4 w-4 text-orange-500" />
               <span className="font-semibold text-slate-800">
-                {mockStats.streak} days
+                {stats.streak} days
               </span>
             </div>
           </div>

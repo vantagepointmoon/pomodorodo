@@ -141,8 +141,8 @@ export default function Home() {
 
           {/* Right Column */}
           <div className="space-y-6">
-            <PomodoroTimer onTimerTypeChange={setTimerType} />
             <MotivationalContent timerType={timerType} />
+            <PomodoroTimer onTimerTypeChange={setTimerType} />
             <ProductivityStats todos={todos} />
           </div>
         </div>

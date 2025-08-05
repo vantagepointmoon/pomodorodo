@@ -53,30 +53,32 @@ export default function TaskInput() {
   return (
     <Card>
       <CardContent className="pt-6">
-        <form onSubmit={handleSubmit} className="flex items-center space-x-4">
-          <div className="flex-1">
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+          <div className="flex-1 min-w-0">
             <Input
               type="text"
               placeholder="Add a new task..."
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="bg-slate-50"
+              className="bg-slate-50 w-full"
             />
           </div>
-          <Select value={priority} onValueChange={(value: "low" | "medium" | "high") => setPriority(value)}>
-            <SelectTrigger className="w-32">
-              <SelectValue placeholder="Priority" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="low">Low</SelectItem>
-              <SelectItem value="medium">Medium</SelectItem>
-              <SelectItem value="high">High</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button type="submit" disabled={createTodoMutation.isPending || !title.trim()}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Task
-          </Button>
+          <div className="flex items-center gap-4">
+            <Select value={priority} onValueChange={(value: "low" | "medium" | "high") => setPriority(value)}>
+              <SelectTrigger className="w-32">
+                <SelectValue placeholder="Priority" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="low">Low</SelectItem>
+                <SelectItem value="medium">Medium</SelectItem>
+                <SelectItem value="high">High</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button type="submit" disabled={createTodoMutation.isPending || !title.trim()}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Task
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>
