@@ -1,3 +1,7 @@
+# Project Documentation
+
+This project was prepared by [Tembo](https://tembo.io).
+
 An entirely Replit vibecoded app for the purposes of testing viability coding entirely on the phone.
 
 The basic functionality:
