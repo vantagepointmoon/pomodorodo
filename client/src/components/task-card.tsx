@@ -217,7 +217,7 @@ export default function TaskCard({ task }: TaskCardProps) {
             {task.priority} Priority
           </span>
           <span>
-            {task.status === "working" && task.timeSpent > 0
+            {task.status === "working" && task.timeSpent && task.timeSpent > 0
               ? `${Math.floor(task.timeSpent / 60)} min`
               : formatDistanceToNow(new Date(task.createdAt), { addSuffix: true })}
           </span>
