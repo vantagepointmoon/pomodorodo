@@ -39,16 +39,24 @@ export default function TaskSection({ title, icon, tasks, dropZone, bgColor }: T
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    e.currentTarget.classList.add(`bg-${bgColor === "slate" ? "blue" : bgColor}-50`, `border-${bgColor === "slate" ? "blue" : bgColor}-300`);
+    const dragOverClass = bgColor === "slate" ? "bg-blue-50 border-blue-300" : 
+                         bgColor === "amber" ? "bg-amber-100 border-amber-400" : 
+                         "bg-emerald-100 border-emerald-400";
+    e.currentTarget.className += ` ${dragOverClass}`;
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
-    e.currentTarget.classList.remove(`bg-${bgColor === "slate" ? "blue" : bgColor}-50`, `border-${bgColor === "slate" ? "blue" : bgColor}-300`);
+    e.preventDefault();
+    const dragOverClasses = ["bg-blue-50", "border-blue-300", "bg-amber-100", "border-amber-400", "bg-emerald-100", "border-emerald-400"];
+    const currentClasses = e.currentTarget.className.split(" ");
+    e.currentTarget.className = currentClasses.filter(cls => !dragOverClasses.includes(cls)).join(" ");
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    e.currentTarget.classList.remove(`bg-${bgColor === "slate" ? "blue" : bgColor}-50`, `border-${bgColor === "slate" ? "blue" : bgColor}-300`);
+    const dragOverClasses = ["bg-blue-50", "border-blue-300", "bg-amber-100", "border-amber-400", "bg-emerald-100", "border-emerald-400"];
+    const currentClasses = e.currentTarget.className.split(" ");
+    e.currentTarget.className = currentClasses.filter(cls => !dragOverClasses.includes(cls)).join(" ");
     
     const taskId = e.dataTransfer.getData("text/plain");
     if (taskId) {
